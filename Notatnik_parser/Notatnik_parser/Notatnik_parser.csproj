@@ -50,6 +50,7 @@
     <Compile Include="Xml\Creator\XmlCreatorMenu.cs" />
     <Compile Include="Xml\Models\Author.cs" />
     <Compile Include="Xml\Models\Book.cs" />
+    <Compile Include="Xml\Models\PublishingHouse.cs" />
     <Compile Include="Xml\Parser\XmlParserMenu.cs" />
   </ItemGroup>
   <ItemGroup>
