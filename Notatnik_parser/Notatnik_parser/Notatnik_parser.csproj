@@ -44,8 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainMenu\MainMenu.cs" />
+    <Compile Include="Notepad\NotepadMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xml\Creator\XmlCreatorMenu.cs" />
+    <Compile Include="Xml\Models\Author.cs" />
+    <Compile Include="Xml\Models\Book.cs" />
+    <Compile Include="Xml\Parser\XmlParserMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

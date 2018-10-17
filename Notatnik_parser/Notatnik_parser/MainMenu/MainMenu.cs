@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Notatnik_parser.Notepad;
+using Notatnik_parser.Xml.Creator;
+using Notatnik_parser.Xml.Parser;
+using System;
 
 namespace Notatnik_parser.MainMenu
 {
@@ -7,6 +10,7 @@ namespace Notatnik_parser.MainMenu
         public void Run()
         {
             ShowInitInfo();
+            MenageUserInput();
 
             Console.ReadKey();
         }
@@ -18,8 +22,6 @@ namespace Notatnik_parser.MainMenu
             Console.WriteLine("1 - notatnik");
             Console.WriteLine("2 - parser XML");
             Console.WriteLine("3 - kreator XML");
-
-            MenageUserInput();
         }
 
         private void MenageUserInput()
@@ -30,6 +32,8 @@ namespace Notatnik_parser.MainMenu
                 insertValue = Console.ReadLine();
 
             } while (!IsUserInputValid(insertValue));
+
+            GoToUserChoice(insertValue);
         }
 
         private bool IsUserInputValid(string userInput)
@@ -41,6 +45,25 @@ namespace Notatnik_parser.MainMenu
 
             Console.WriteLine("Proszę wybrać numer z listy");
             return false;
+        }
+
+        private void GoToUserChoice(string userChoice)
+        {
+            switch (userChoice)
+            {
+                case "1":
+                    new NotepadMenu().Run();
+                    break;
+                case "2":
+                    new XmlParserMenu().Run();
+                    break;
+                case "3":
+                    new XmlCreatorMenu().Run();
+                    break;
+                default:
+                    Console.WriteLine("Błąd");
+                    break;
+            }
         }
     }
 }
