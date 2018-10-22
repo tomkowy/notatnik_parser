@@ -1,0 +1,20 @@
+using System;
+using System.IO;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string pathString = @"C:\somePath";
+            string fileName = "JustBlankFile.txt";
+            pathString = System.IO.Path.Combine(pathString, fileName);
+
+            using (System.IO.FileStream fs = System.IO.File.Create(pathString))
+            {
+
+            }
+        }
+    }
+}    
