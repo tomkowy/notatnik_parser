@@ -7,7 +7,7 @@ namespace Notatnik_parser.MainMenu
 {
     public class MainMenu
     {
-        public void Run()//test
+        public void Run()
         {
             ShowInitInfo();
             MenageUserInput();
