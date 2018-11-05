@@ -6,25 +6,23 @@ namespace Notatnik_parser.Notepad
 {
     public class NotepadMenu
     {   
-        string note;
-
-        public void SaveFile()
+        private string SaveFile()
         {            
-            string fileName = "LastNote.txt"; 
-            using (System.IO.FileStream fs = System.IO.File.Create(fileName))
-            {
-                Byte[] toSave = new UTF8Encoding(true).GetBytes(note);
-                fs.Write(toSave, 0, toSave.Length);
-            }
+            string fileName = "LastNote.txt";
+            using (FileStream fs = File.Create(fileName))
+                {
+                    Byte[] note = new UTF8Encoding(true).GetBytes(Console.ReadLine());
+                    fs.Write(note, 0, note.Length);
+                }
+            return null;
         }
 
         public void Run()
         {
             Console.WriteLine("Witamy w notatniku. Wprowadź notatkę (wciśnij <enter> aby zapisać):");
-            note = Console.ReadLine();
-
-            ConsoleKeyInfo saveButton = Console.ReadKey();
-            if (saveButton.Key == ConsoleKey.Enter)
+            
+            ConsoleKeyInfo forSave = Console.ReadKey();
+            if (forSave.Key == ConsoleKey.Enter)
             {
                 SaveFile();
             }
