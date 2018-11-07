@@ -6,12 +6,20 @@ namespace Notatnik_parser.Notepad
 {
     public class NotepadMenu
     {   
-        private string SaveFile()
+        string noteText;
+
+        private string GetText()
+        {
+            noteText = Console.ReadLine();
+            return noteText;
+        }
+        
+        private string SaveFile(string noteText)
         {            
             string fileName = "LastNote.txt";
             using (FileStream fs = File.Create(fileName))
                 {
-                    Byte[] note = new UTF8Encoding(true).GetBytes(Console.ReadLine());
+                    Byte[] note = new UTF8Encoding(true).GetBytes(noteText);
                     fs.Write(note, 0, note.Length);
                 }
             return null;
@@ -21,10 +29,13 @@ namespace Notatnik_parser.Notepad
         {
             Console.WriteLine("Witamy w notatniku. Wprowadź notatkę (wciśnij <enter> aby zapisać):");
             
-            ConsoleKeyInfo forSave = Console.ReadKey();
-            if (forSave.Key == ConsoleKey.Enter)
+            GetText();
+
+            ConsoleKeyInfo typedKey = Console.ReadKey();
+            if (typedKey.Key == ConsoleKey.Enter)
             {
-                SaveFile();
+                Console.WriteLine("To jest twoja notatka, która została zapisana do pliku txt: " + noteText);
+                SaveFile(noteText);
             }
         }      
     }
