@@ -5,37 +5,31 @@ using System.Text;
 namespace Notatnik_parser.Notepad
 {
     public class NotepadMenu
-    {   
-        string noteText;
-
-        private string GetText()
-        {
-            noteText = Console.ReadLine();
-            return noteText;
-        }
-        
-        private string SaveFile(string noteText)
+    {           
+        static void saveFile(ref string textNoteParameter)
         {            
             string fileName = "LastNote.txt";
+
             using (FileStream fs = File.Create(fileName))
                 {
-                    Byte[] note = new UTF8Encoding(true).GetBytes(noteText);
+                    Byte[] note = new UTF8Encoding(true).GetBytes(textNoteParameter);
                     fs.Write(note, 0, note.Length);
-                }
-            return null;
+                }            
         }
 
         public void Run()
-        {
-            Console.WriteLine("Witamy w notatniku. Wprowadź notatkę (wciśnij <enter> aby zapisać):");
-            
-            GetText();
+        {   
+            string note;
+
+            Console.WriteLine("Witamy w notatniku. Wprowadź notatkę (wciśnij 2 x <enter> aby zapisać):");
+
+            note = Console.ReadLine();
 
             ConsoleKeyInfo typedKey = Console.ReadKey();
-            if (typedKey.Key == ConsoleKey.Enter)
+            if (typedKey.Key == ConsoleKlaey.Enter)
             {
-                Console.WriteLine("To jest twoja notatka, która została zapisana do pliku txt: " + noteText);
-                SaveFile(noteText);
+                Console.WriteLine("To jest twoja notatka, która została zapisana do pliku txt: " + note);
+                saveFile(ref note);
             }
         }      
     }
