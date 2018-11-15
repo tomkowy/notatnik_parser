@@ -6,15 +6,37 @@ namespace Notatnik_parser.Notepad
 {
     public class NotepadMenu
     {           
-        private void SaveFile(string textNoteParameter)
+        private bool SaveFile(string textNoteParameter)
         {            
-            string fileName = "LastNote.txt";
+            string pathAndFileName;
+            
+            Console.WriteLine("Podaj pełną ścieżkę z nazwą pliku:");
+            pathAndFileName = Console.ReadLine();
 
-            using (FileStream fs = File.Create(fileName))
+            try
+            {
+                using (FileStream fs = File.Create(pathAndFileName))
                 {
                     Byte[] textNote = new UTF8Encoding(true).GetBytes(textNoteParameter);
                     fs.Write(textNote, 0, textNote.Length);
-                }            
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                FileAttributes attr = (new FileInfo(pathAndFileName)).Attributes;
+                Console.Write("Błędna ścieżka.");
+            }
+            finally
+            {
+                string defaultFileName = "Domyślna_notatka.txt";
+                using (FileStream fs = File.Create(defaultFileName))
+                {
+                    Byte[] textNote = new UTF8Encoding(true).GetBytes(textNoteParameter);
+                    fs.Write(textNote, 0, textNote.Length);
+                }
+            }
+
+            return true;
         }
 
         public void Run()
@@ -26,11 +48,10 @@ namespace Notatnik_parser.Notepad
             note = Console.ReadLine();
 
             ConsoleKeyInfo typedKey = Console.ReadKey();
-            if (typedKey.Key == ConsoleKey.Enter)
-            {
-                Console.WriteLine("To jest twoja notatka, która została zapisana do pliku txt: " + note);
-                SaveFile(note);
-                
+            if (typedKey.Key == ConsoleKey.Enter && SaveFile(note))
+            {   
+                Console.WriteLine("Zapisano.");
+                                
                 var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
                 mainMenu.Run();
             }            
