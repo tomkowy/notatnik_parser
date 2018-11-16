@@ -5,13 +5,11 @@ using System.Text;
 namespace Notatnik_parser.Notepad
 {
     public class NotepadMenu
-    {           
+    {        
         private bool SaveFile(string textNoteParameter)
-        {            
-            string pathAndFileName;
-            
+        {    
             Console.WriteLine("Podaj pełną ścieżkę z nazwą pliku:");
-            pathAndFileName = Console.ReadLine();
+            string pathAndFileName = Console.ReadLine();
 
             try
             {
@@ -24,37 +22,28 @@ namespace Notatnik_parser.Notepad
             catch (UnauthorizedAccessException)
             {
                 FileAttributes attr = (new FileInfo(pathAndFileName)).Attributes;
-                Console.Write("Błędna ścieżka.");
+                return false;
             }
-            finally
-            {
-                string defaultFileName = "Domyślna_notatka.txt";
-                using (FileStream fs = File.Create(defaultFileName))
-                {
-                    Byte[] textNote = new UTF8Encoding(true).GetBytes(textNoteParameter);
-                    fs.Write(textNote, 0, textNote.Length);
-                }
-            }
-
+            
             return true;
         }
 
-        public void Run()
-        {   
-            string note;
+        public void Run() {
 
             Console.WriteLine("Witamy w notatniku. Wprowadź notatkę (wciśnij 2 x <enter> aby zapisać):");
-
-            note = Console.ReadLine();
-
+            string note = Console.ReadLine();
             ConsoleKeyInfo typedKey = Console.ReadKey();
+
             if (typedKey.Key == ConsoleKey.Enter && SaveFile(note))
-            {   
-                Console.WriteLine("Zapisano.");
-                                
+            {                
+                Console.WriteLine("Zapisano.");                                
                 var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
                 mainMenu.Run();
-            }            
+            }
+            else if (typedKey.Key == ConsoleKey.Enter && !SaveFile(note))
+            {                
+                Console.WriteLine("Błędna ścieżka. Nie udało się zapisać.");                                
+            }
         }      
     }
 }
