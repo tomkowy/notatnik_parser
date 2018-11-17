@@ -5,7 +5,77 @@ using System.Text;
 namespace Notatnik_parser.Notepad
 {
     public class NotepadMenu
-    {        
+    {   
+        public void Run() {
+
+            ShowNotpadMenu();
+            MenageUserInput();
+        }
+
+        public void ShowNotpadMenu()
+        {
+            Console.WriteLine("Witamy w notatniku. Wybierz:");
+            Console.WriteLine("1 - nowa notatka");
+            Console.WriteLine("2 - otwórz notatkę");
+        }
+
+        private void MenageUserInput()
+        {
+            string insertValue;
+            do
+            {
+                insertValue = Console.ReadLine();
+
+            } while (!IsUserInputValid(insertValue));
+
+            GoToUserChoice(insertValue);
+        }
+
+        private bool IsUserInputValid(string userInput)
+        {
+            if (userInput == "1" || userInput == "2")
+            {
+                return true;
+            }
+
+            Console.WriteLine("Proszę wybrać numer z listy");
+            return false;
+        }
+
+        private void GoToUserChoice(string userChoice)
+        {
+            switch (userChoice)
+            {
+                case "1":
+                    WriteNewNote();
+                    break;
+                case "2":
+                    Console.WriteLine("Jeszcze nie działa. Oczekuj aktualizacji programu.");
+                    break;
+                default:
+                    Console.WriteLine("Błąd");
+                    break;
+            }
+        }
+
+        private void WriteNewNote()
+        {       
+            Console.WriteLine("Wprowadź notatkę (wciśnij 2 x <enter> aby zapisać):");
+            string note = Console.ReadLine();
+            ConsoleKeyInfo typedKey = Console.ReadKey();
+
+            if (typedKey.Key == ConsoleKey.Enter && SaveFile(note))
+            {                
+                Console.WriteLine("Zapisano.");                                
+                var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
+                mainMenu.Run();
+            }
+            else if (typedKey.Key == ConsoleKey.Enter && !SaveFile(note))
+            {                
+                Console.WriteLine("Błędna ścieżka. Nie udało się zapisać.");                                
+            }
+        }
+
         private bool SaveFile(string textNoteParameter)
         {    
             Console.WriteLine("Podaj pełną ścieżkę z nazwą pliku:");
@@ -27,23 +97,5 @@ namespace Notatnik_parser.Notepad
             
             return true;
         }
-
-        public void Run() {
-
-            Console.WriteLine("Witamy w notatniku. Wprowadź notatkę (wciśnij 2 x <enter> aby zapisać):");
-            string note = Console.ReadLine();
-            ConsoleKeyInfo typedKey = Console.ReadKey();
-
-            if (typedKey.Key == ConsoleKey.Enter && SaveFile(note))
-            {                
-                Console.WriteLine("Zapisano.");                                
-                var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
-                mainMenu.Run();
-            }
-            else if (typedKey.Key == ConsoleKey.Enter && !SaveFile(note))
-            {                
-                Console.WriteLine("Błędna ścieżka. Nie udało się zapisać.");                                
-            }
-        }      
     }
 }
