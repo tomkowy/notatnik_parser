@@ -50,7 +50,7 @@ namespace Notatnik_parser.Notepad
                     WriteNewNote();
                     break;
                 case "2":
-                    Console.WriteLine("Jeszcze nie działa. Oczekuj aktualizacji programu.");
+                    OpenTextFile();
                     break;
                 default:
                     Console.WriteLine("Błąd");
@@ -97,5 +97,29 @@ namespace Notatnik_parser.Notepad
             
             return true;
         }
+
+        private void OpenTextFile()
+        {
+            Console.WriteLine("Podaj pełną ścieżkę z nazwą pliku:");
+            string pathAndFileNameToOpen = Console.ReadLine();
+
+             try
+            {
+                using (FileStream fs = File.Open(pathAndFileNameToOpen, FileMode.Open)) 
+                {
+                    byte[] b = new byte[1024];
+                    UTF8Encoding temp = new UTF8Encoding(true);
+
+                    while (fs.Read(b,0,b.Length) > 0) 
+                    {
+                        Console.WriteLine(temp.GetString(b));
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                FileAttributes attr = (new FileInfo(pathAndFileNameToOpen)).Attributes;
+            }
+        }       
     }
 }
