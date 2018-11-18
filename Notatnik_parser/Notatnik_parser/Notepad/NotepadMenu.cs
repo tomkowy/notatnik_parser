@@ -98,14 +98,11 @@ namespace Notatnik_parser.Notepad
             return true;
         }
 
-        private void OpenTextFile()
+        private bool IsUserPathInputValid(string insertPathValue)
         {
-            Console.WriteLine("Podaj pełną ścieżkę z nazwą pliku:");
-            string pathAndFileNameToOpen = Console.ReadLine();
-
              try
             {
-                using (FileStream fs = File.Open(pathAndFileNameToOpen, FileMode.Open)) 
+                using (FileStream fs = File.Open(insertPathValue, FileMode.Open)) 
                 {
                     byte[] b = new byte[1024];
                     UTF8Encoding temp = new UTF8Encoding(true);
@@ -115,11 +112,26 @@ namespace Notatnik_parser.Notepad
                         Console.WriteLine(temp.GetString(b));
                     }
                 }
+                return true;
             }
             catch (UnauthorizedAccessException)
             {
-                FileAttributes attr = (new FileInfo(pathAndFileNameToOpen)).Attributes;
+                FileAttributes attr = (new FileInfo(insertPathValue)).Attributes;
+                return false;
             }
-        }       
+        }
+        
+        private void MenageUserPathInput()
+        {
+            string insertPathValue;
+            do
+            {
+                insertPathValue = Console.ReadLine();
+
+            } while (!IsUserPathInputValid(insertPathValue));
+
+            OpenTextFile(insertPathValue);
+        }
+
     }
 }
