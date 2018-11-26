@@ -52,7 +52,7 @@ namespace Notatnik_parser.Notepad
                     WriteNewNote();
                     break;
                 case "2":
-                    MenageUserPathInput();
+                    OpenTextFile();
                     break;
                 default:
                     Console.WriteLine("Błąd");
@@ -100,8 +100,11 @@ namespace Notatnik_parser.Notepad
             return true;
         }
 
-        private void OpenTextFile(string insertPathValue)
-        {
+        private void OpenTextFile()
+        {   
+            string insertPathValue = MenageUserPathInput();
+            Console.WriteLine("Treść otworzonej notatki:");
+
             using (FileStream fs = File.Open(insertPathValue, FileMode.Open)) 
             {
                 byte[] b = new byte[1024];
@@ -112,13 +115,16 @@ namespace Notatnik_parser.Notepad
                     Console.WriteLine(temp.GetString(b));
                 }
             }
+
+            var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
+            mainMenu.Run();
+
         }
 
         private bool IsUserPathInputValid(string insertPathValue)
         {
-            if(File.Exists(insertPathValue)) 
-            {
-                OpenTextFile(insertPathValue);
+            if(File.Exists(insertPathValue))
+            {                
                 return true;
             }               
             else 
@@ -128,18 +134,18 @@ namespace Notatnik_parser.Notepad
             }      
         }
         
-        private void MenageUserPathInput()
+        private string MenageUserPathInput()
         {
             string insertPathValue;
+
             do
             {   
                 Console.WriteLine(pathInstructions, "otworzyć z");                
-                insertPathValue = Console.ReadLine();
+                insertPathValue = Console.ReadLine();                
             }
             while (!IsUserPathInputValid(insertPathValue));
 
-            var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
-            mainMenu.Run();
+            return insertPathValue;
         }
     }
 }
