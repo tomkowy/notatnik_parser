@@ -64,45 +64,101 @@ namespace Notatnik_parser.Notepad
         {       
             Console.WriteLine("Wprowadź notatkę (wciśnij 2 x <enter> aby zapisać):");
             string note = Console.ReadLine();
+
             ConsoleKeyInfo typedKey = Console.ReadKey();
 
-            if (typedKey.Key == ConsoleKey.Enter && SaveFile(note))
+            if (typedKey.Key == ConsoleKey.Enter)
             {                
-                Console.WriteLine("Zapisano.");                                
-                var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
-                mainMenu.Run();
+                SaveFile(note);
+                Console.WriteLine("Zapisano.");
             }
-            else if (typedKey.Key == ConsoleKey.Enter && !SaveFile(note))
+            else
             {                
-                Console.WriteLine("Błędna ścieżka. Nie udało się zapisać.");                                
+                Console.WriteLine("Błąd. Nie udało się zapisać.");                                
             }
+
+            ReturnToMenu();
         }
 
-        private bool SaveFile(string textNoteParameter)
+        private void SaveFile(string textNoteParameter)
         {    
             Console.WriteLine(pathInstructions, "zapisać do");
-            string pathAndFileName = Console.ReadLine();
-
+            string insertPathValue = MenageUserPathInput();
+            string pathAndfileName = MenageUserNameInput(insertPathValue);
+            
             try
             {
-                using (FileStream fs = File.Create(pathAndFileName))
+                using (FileStream fs = File.Create(pathAndfileName))
                 {
                     Byte[] textNote = new UTF8Encoding(true).GetBytes(textNoteParameter);
                     fs.Write(textNote, 0, textNote.Length);
                 }
             }
-            catch (UnauthorizedAccessException)
+            catch(UnauthorizedAccessException)
             {
-                FileAttributes attr = (new FileInfo(pathAndFileName)).Attributes;
-                return false;
+                Console.WriteLine("Nie masz uprawnień do folderu");
             }
-            
-            return true;
+        }
+
+        private bool IsUserPathInputValid(string insertPathValue)
+        {
+            if(Directory.Exists(insertPathValue))
+            {                
+                return true;
+            }               
+            else 
+            {
+                Console.WriteLine("{0} - błąd: folder nie istnieje, albo nie masz do niego dostępu.", insertPathValue);
+                return false;
+            }      
+        }
+
+        private string MenageUserPathInput()
+        {
+            string insertPathValue;
+
+            do
+            {   
+                Console.WriteLine("Wpisz ścieżkę do folderu:");                
+                insertPathValue = Console.ReadLine();                
+            }
+            while (!IsUserPathInputValid(insertPathValue));
+
+            return insertPathValue;
+        }
+
+        private string MenageUserNameInput(string pathName)
+        {
+            string insertNameValue;
+            string insertPathAndNameValue;
+
+            do
+            {   
+                Console.WriteLine("Podaj nazwę pliku z rozszerzeniem:");                
+                insertNameValue = Console.ReadLine();
+                insertPathAndNameValue = pathName + '/' + insertNameValue;
+            }
+            while (!IsFileExist(insertPathAndNameValue));
+
+            return insertPathAndNameValue;
+        }
+
+        private bool IsFileExist(string insertPathAndNameValue)
+        {
+            if(File.Exists(insertPathAndNameValue))
+            {                
+                Console.WriteLine("{0} - ta ścieżka jest niewłaściwa.", insertPathAndNameValue);
+                return false;
+            }               
+            else 
+            {
+                return true;
+            }      
         }
 
         private void OpenTextFile()
         {   
-            string insertPathValue = MenageUserPathInput();
+            string insertPathValue = MenageUserPathAndNameInput();
             Console.WriteLine("Treść otworzonej notatki:");
 
             using (FileStream fs = File.Open(insertPathValue, FileMode.Open)) 
@@ -116,36 +172,40 @@ namespace Notatnik_parser.Notepad
                 }
             }
 
-            var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
-            mainMenu.Run();
-
+            ReturnToMenu();
         }
 
-        private bool IsUserPathInputValid(string insertPathValue)
+        private bool IsUserPathAndNameInputValid(string insertPathAndNameValue)
         {
-            if(File.Exists(insertPathValue))
+            if(File.Exists(insertPathAndNameValue))
             {                
                 return true;
             }               
             else 
             {
-                Console.WriteLine("{0} - ta ścieżka jest niewłaściwa.", insertPathValue);
+                Console.WriteLine("{0} - ta ścieżka jest niewłaściwa.", insertPathAndNameValue);
                 return false;
             }      
         }
         
-        private string MenageUserPathInput()
+        private string MenageUserPathAndNameInput()
         {
-            string insertPathValue;
+            string insertPathAndNameValue;
 
             do
             {   
                 Console.WriteLine(pathInstructions, "otworzyć z");                
-                insertPathValue = Console.ReadLine();                
+                insertPathAndNameValue = Console.ReadLine();                
             }
-            while (!IsUserPathInputValid(insertPathValue));
+            while (!IsUserPathAndNameInputValid(insertPathAndNameValue));
 
-            return insertPathValue;
+            return insertPathAndNameValue;
+        }
+
+        private void ReturnToMenu()
+        {
+            var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
+                mainMenu.Run();
         }
     }
 }
