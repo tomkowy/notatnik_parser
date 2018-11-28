@@ -69,8 +69,7 @@ namespace Notatnik_parser.Notepad
 
             if (typedKey.Key == ConsoleKey.Enter)
             {                
-                SaveFile(note);
-                Console.WriteLine("Zapisano.");
+                SaveFile(note);                
             }
             else
             {                
@@ -93,10 +92,11 @@ namespace Notatnik_parser.Notepad
                     Byte[] textNote = new UTF8Encoding(true).GetBytes(textNoteParameter);
                     fs.Write(textNote, 0, textNote.Length);
                 }
+                Console.WriteLine("Zapisano.");                
             }
             catch(UnauthorizedAccessException)
             {
-                Console.WriteLine("Nie masz uprawnień do folderu");
+                Console.WriteLine("Nie masz uprawnień do folderu.");
             }
         }
 
