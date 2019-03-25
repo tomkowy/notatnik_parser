@@ -206,6 +206,7 @@ namespace Notatnik_parser.Notepad
         {
             var mainMenu = new Notatnik_parser.MainMenu.MainMenu();
                 mainMenu.Run();
+            mainMenu.Run();
         }
     }
 }
